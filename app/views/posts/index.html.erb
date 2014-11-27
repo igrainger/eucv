@@ -1,29 +1,38 @@
-<h1>Listing posts</h1>
-
-<table>
+<%- model_class = Posts -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => Posts %></h1>
+</div>
+<table class="table table-striped">
   <thead>
     <tr>
-      <th>Title</th>
-      <th>Article</th>
-      <th>User</th>
-      <th colspan="3"></th>
+      <th>ID</th>
+      <th><%= model_class.human_attribute_name(:title) %></th>
+      <th><%= model_class.human_attribute_name(:article) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
-
   <tbody>
-    <% @posts.each do |post| %>
+    <% @posts.each do |posts| %>
       <tr>
-        <td><%= post.title %></td>
-        <td><%= post.article %></td>
-        <td><%= post.user %></td>
-        <td><%= link_to 'Show', post %></td>
-        <td><%= link_to 'Edit', edit_post_path(post) %></td>
-        <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= posts.id %></td>
+        <td><%= posts.title %></td>
+        <td><%= posts.article %></td>
+        <td><%=l posts.created_at, format: :long %></td>
+        <td>
+          <%= link_to posts_path(posts), :class => 'btn btn-xs', :title => "#{ t('.show', :default => t('helpers.links.show')) }" do %>
+            <%= glyph 'info-sign' %>
+            <%= glyph 'pencil' %>
+          <%- end -%>
+          <%= link_to posts_path(posts), :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-xs', :title => "#{ t('.destroy', :default => t('helpers.links.destroy')) }" do %>
+            <%= glyph 'remove' %>
+          <%- end -%>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<br>
-
-<%= link_to 'New Post', new_post_path %>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_posts_path,
+            :class => 'btn btn-primary' %>
